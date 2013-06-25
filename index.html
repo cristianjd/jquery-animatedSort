@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <title>Animated Sort</title>
+        </head>
+
+        <body>
+            <h2>Bubble Sort</h2>
+
+            <div id="existing">
+                <ul>
+                    <li>23</li>
+                    <li>51</li>
+                    <li>11</li>
+                    <li>44</li>
+                    <li>8</li>
+                    <li>99</li>
+                    <li>3</li>
+                </ul>
+            </div>
+            <!--<div id="array"></div>
+            <div id="random"></div>-->
+
+
+
+
+        <script src="js/jquery-1.10.1.min.js" ></script>
+        <script src ="js/jquery.animatedsort.js"></script>
+        <script>
+            /*var list = [];
+
+            $("#existing").find("li").each(function() {
+                list.push(Number($(this).text()));
+                $(this).css({"position": "relative", "top": 0, "left": 0});
+            });
+            console.log(list);*/
+
+            $("#existing").animatedSort({sortType: "bubble", hlColor: "red", stepTime: 1000});
+
+        </script>
+
+        </body>
+        </html>
