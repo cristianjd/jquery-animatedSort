@@ -20,7 +20,7 @@ if ( typeof Object.create !== 'function') {
             self.stepTime = self.options.stepTime;
             self.sortType = self.options.sortType;
             self.numbers = self.$elem.find("li");
-            self.initColor = self.numbers.eq(1).css("color");
+            self.initColor = self.numbers.eq(0).css("color");
             self.animSteps = [];
         },
 
@@ -39,13 +39,15 @@ if ( typeof Object.create !== 'function') {
 
         // Animation Function Definitions
 
-        highlight: function(i1, i2, hlColor){
+        highlight: function(iArray, hlColor){
             var self = this;
             var colorTime = self.stepTime*(0.5);
-            var $li1 = self.numbers.eq(i1);
-            var $li2 = self.numbers.eq(i2);
+            var $liSel = self.numbers.eq(iArray[0]);
+            for (var n = 1; n < iArray.length; n++) {
+                $liSel = $liSel.add(self.numbers.eq(iArray[n]));
+            }
             self.animSteps.push(function() {
-                $li1.add($li2).animate({color: hlColor}, colorTime);//css("color", hlColor);
+                $liSel.animate({color: hlColor}, colorTime);//css("color", hlColor);
             });
 
         },
@@ -109,11 +111,11 @@ if ( typeof Object.create !== 'function') {
             var self = this;
             for (var n = list.length; n > 1; --n) {
                 for (var i = 0; i < n-1; ++i) {
-                    self.highlight(i, i+1, self.hlColor);
+                    self.highlight([i, i+1], self.hlColor);
                     if (list[i] > list[i+1]) {
                         self.swap(list, i, i+1);
                     }
-                    self.highlight(i, i+1, self.initColor);
+                    self.highlight([i, i+1], self.initColor);
                 }
             }
         }
