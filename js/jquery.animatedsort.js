@@ -34,8 +34,9 @@ if ( typeof Object.create !== 'function') {
         },
 
         swap: function(list, i1, i2) {
-            //swap in list
             var self = this;
+
+            //swap in list
             var temp = list[i1];
             list[i1] = list[i2];
             list[i2] = temp;
@@ -44,10 +45,13 @@ if ( typeof Object.create !== 'function') {
             var $li1 = self.numbers.eq(i1);
             var $li2 = self.numbers.eq(i2);
 
+            //define slide timing
+            var slideTime = self.stepTime*(2/3);
+
             // add animation functions to array
             self.animSteps.push(function(){
                 //slide out
-                $li1.add($li2).animate({left: 80}, 400);
+                $li1.add($li2).animate({left: 80}, slideTime);
             }, function() {
                // position and value variables
                 var li1_val = $li1.text();
@@ -56,17 +60,17 @@ if ( typeof Object.create !== 'function') {
                 var li2_pos = $li2.position().top;
 
                 // animate swap
-                $li1.animate({top: li2_pos-li1_pos}, 400, function() {
+                $li1.animate({top: li2_pos-li1_pos}, slideTime, function() {
                     $li1.css("top", 0);
                     $li1.text(li2_val);
                 });
-                $li2.animate({top: li1_pos-li2_pos}, 400, function() {
+                $li2.animate({top: li1_pos-li2_pos}, slideTime, function() {
                     $li2.css("top", 0);
                     $li2.text(li1_val);
                 });
             }, function() {
                 // slide in
-                $li1.add($li2).animate({left: 0}, 400);
+                $li1.add($li2).animate({left: 0}, slideTime);
             });
         },
 
@@ -76,7 +80,7 @@ if ( typeof Object.create !== 'function') {
                 setTimeout(function(){
                     self.animSteps.splice(0,1)[0]();
                     self.animation();
-                }, 600);
+                }, self.stepTime);
             }
         },
 
