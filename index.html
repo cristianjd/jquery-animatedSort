@@ -25,18 +25,13 @@
 
 
         <script src="js/jquery-1.10.1.min.js" ></script>
-        <script src ="js/jquery.animatedsort.js"></script>
+        <script src="js/jquery.animatedsort.js"></script>
+        <script src="js/jquery.color.js"></script>
         <script>
-            /*var list = [];
-
-            $("#existing").find("li").each(function() {
-                list.push(Number($(this).text()));
-                $(this).css({"position": "relative", "top": 0, "left": 0});
-            });
-            console.log(list);*/
 
             $("#existing").animatedSort({
-                stepTime: 500
+                stepTime: 600,
+                hlColor: "blue"
             });
 
         </script>

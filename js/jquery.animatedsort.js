@@ -1,4 +1,4 @@
-// Utility
+// Browser Compatibility with Object.create
 if ( typeof Object.create !== 'function') {
     Object.create = function(obj) {
         function F(){}
@@ -20,8 +20,11 @@ if ( typeof Object.create !== 'function') {
             self.stepTime = self.options.stepTime;
             self.sortType = self.options.sortType;
             self.numbers = self.$elem.find("li");
+            self.initColor = self.numbers.eq(1).css("color");
             self.animSteps = [];
         },
+
+        // List Processing
 
         initList: function() {
             var list = [];
@@ -31,6 +34,20 @@ if ( typeof Object.create !== 'function') {
                 $(this).css({"position": "relative", "top": 0, "left": 0});
             });
             return list;
+        },
+
+
+        // Animation Function Definitions
+
+        highlight: function(i1, i2, hlColor){
+            var self = this;
+            var colorTime = self.stepTime*(0.5);
+            var $li1 = self.numbers.eq(i1);
+            var $li2 = self.numbers.eq(i2);
+            self.animSteps.push(function() {
+                $li1.add($li2).animate({color: hlColor}, colorTime);//css("color", hlColor);
+            });
+
         },
 
         swap: function(list, i1, i2) {
@@ -74,6 +91,8 @@ if ( typeof Object.create !== 'function') {
             });
         },
 
+        // Execute Animation
+
         animation: function() {
             var self = this;
             if (self.animSteps.length) {
@@ -84,16 +103,20 @@ if ( typeof Object.create !== 'function') {
             }
         },
 
-        bubblesort: function(list) {
-                var self = this;
-                for (var n = list.length; n > 1; --n) {
-                    for (var i = 0; i < n-1; ++i) {
-                        if (list[i] > list[i+1]) {
-                            self.swap(list, i, i+1);
-                        }
+        // Sort Algorithms
+
+        bubble: function(list) {
+            var self = this;
+            for (var n = list.length; n > 1; --n) {
+                for (var i = 0; i < n-1; ++i) {
+                    self.highlight(i, i+1, self.hlColor);
+                    if (list[i] > list[i+1]) {
+                        self.swap(list, i, i+1);
                     }
+                    self.highlight(i, i+1, self.initColor);
                 }
             }
+        }
     };
 
 
@@ -101,7 +124,7 @@ if ( typeof Object.create !== 'function') {
         return this.each(function() {
             var sort = Object.create( Sort );
             sort.init(options, this);
-            sort.bubblesort(sort.initList());
+            sort.bubble(sort.initList());
             sort.animation();
         });
     };
