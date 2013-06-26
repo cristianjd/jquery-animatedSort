@@ -1,0 +1,13 @@
+ul {
+    list-style-type: none;
+}
+
+li {
+    font-size: 2em;
+}
+
+div {
+    display: inline-block;
+    border: 1px solid black;
+    width: 300px;
+}

@@ -41,14 +41,16 @@ if ( typeof Object.create !== 'function') {
 
         highlight: function(iArray, hlColor){
             var self = this;
-            var colorTime = self.stepTime*(0.5);
-            var $liSel = self.numbers.eq(iArray[0]);
-            for (var n = 1; n < iArray.length; n++) {
-                $liSel = $liSel.add(self.numbers.eq(iArray[n]));
+            if (self.hlColor !== "none"){
+                var colorTime = self.stepTime*(0.5);
+                var $liSel = self.numbers.eq(iArray[0]);
+                for (var n = 1; n < iArray.length; n++) {
+                    $liSel = $liSel.add(self.numbers.eq(iArray[n]));
+                }
+                self.animSteps.push(function() {
+                    $liSel.animate({color: hlColor}, colorTime);//css("color", hlColor);
+                });
             }
-            self.animSteps.push(function() {
-                $liSel.animate({color: hlColor}, colorTime);//css("color", hlColor);
-            });
 
         },
 
