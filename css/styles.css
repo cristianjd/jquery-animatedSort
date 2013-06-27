@@ -6,13 +6,8 @@ li {
     font-size: 2em;
 }
 
-div {
+#existing, #array, #random {
     display: inline-block;
     border: 1px solid black;
     width: 300px;
-}
-
-#trigger {
-    background-color: yellow;
-    height: 300px;
 }

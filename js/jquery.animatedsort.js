@@ -163,7 +163,7 @@ if ( typeof Object.create !== 'function') {
             else if (typeof(sort.listType) === "object" ){
                 sort.genList(sort.randList(sort.listType.bottom, sort.listType.top, sort.listType.length));
             }
-            sort.bubble(sort.initList()); // prepares animation to be executed
+            sort.bubble(sort.initList()); // prepares animation to be executed (will need switch for diff algs.)
             if (typeof(sort.callback) === "function"){
                 var self = this;
                 sort.animSteps.push(function(){sort.callback.call(self)});
