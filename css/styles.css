@@ -11,3 +11,8 @@ div {
     border: 1px solid black;
     width: 300px;
 }
+
+#trigger {
+    background-color: yellow;
+    height: 300px;
+}

@@ -21,6 +21,7 @@ if ( typeof Object.create !== 'function') {
             self.stepTime = self.options.stepTime;
             self.sortType = self.options.sortType;
             self.listType = self.options.listType;
+            self.trig = self.options.trig;
             self.animSteps = [];
         },
 
@@ -156,7 +157,15 @@ if ( typeof Object.create !== 'function') {
                 sort.genList(sort.randList(sort.listType.bottom, sort.listType.top, sort.listType.length));
             }
             sort.bubble(sort.initList());
-            sort.animation();
+            if (sort.trig === "none"){
+                sort.animation();
+            }
+            else if (typeof(sort.trig) === "object"){
+                $(document).on(sort.trig.event, sort.trig.selector, function() {
+                    sort.animation();
+                });
+            }
+
         });
     };
 
@@ -165,7 +174,8 @@ if ( typeof Object.create !== 'function') {
         hlColor: "red",             // highlight color (none sets no highlight)
         sortedColor: "blue",        // sorted color (none sets to no highlight)
         stepTime: 1000,             // ms between animation steps
-        listType: "existing"        // "existing", object for random , array
+        listType: "existing",       // "existing", object for random , array
+        trig: "none"             // none loads on document, object for event and selector
     }
 
 })(jQuery, window, document);

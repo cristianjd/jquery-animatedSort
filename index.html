@@ -18,6 +18,7 @@
                     <li>3</li>
                 </ul>
             </div>
+            <div id="trigger"></div>
             <div id="array">
                 <h2>Array to List</h2>
             </div>
@@ -43,7 +44,8 @@
                 stepTime: 600,
                 hlColor: "green",
                 listType: [2, 19, 66, 5, 3, 79, 1],
-                sortedColor: "#2e7ca9"
+                sortedColor: "#2e7ca9",
+                trig: {event: "click", selector: "#trigger"}
             });
 
             $("#random").animatedSort({
