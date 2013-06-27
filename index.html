@@ -38,6 +38,18 @@
                 hlColor: "none"
             });
 
+            $("#array").animatedSort({
+                stepTime: 600,
+                hlColor: "green",
+                listType: [2, 19, 66, 5, 3, 79, 1]
+            });
+
+            $("#random").animatedSort({
+                stepTime: 600,
+                hlColor: "red",
+                listType: {bottom: 0, top: 100, length: 7}
+            });
+
         </script>
 
         </body>

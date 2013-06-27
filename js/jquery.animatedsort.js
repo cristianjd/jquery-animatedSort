@@ -19,8 +19,7 @@ if ( typeof Object.create !== 'function') {
             self.hlColor = self.options.hlColor;
             self.stepTime = self.options.stepTime;
             self.sortType = self.options.sortType;
-            self.numbers = self.$elem.find("li");
-            self.initColor = self.numbers.eq(0).css("color");
+            self.listType = self.options.listType;
             self.animSteps = [];
         },
 
@@ -29,11 +28,31 @@ if ( typeof Object.create !== 'function') {
         initList: function() {
             var list = [];
             var self = this;
+            self.numbers = self.$elem.find("li");
+            self.initColor = self.numbers.eq(0).css("color");
             self.$elem.find("li").each(function() {
                 list.push(Number($(this).text()));
                 $(this).css({"position": "relative", "top": 0, "left": 0});
             });
             return list;
+        },
+
+        randList: function(bottom, top, length) {
+            var list = [];
+            for (var n = 0; n<length; n++) {
+                list.push(Math.floor(Math.random()*(top-bottom)+bottom));
+            }
+            return list;
+        },
+
+        genList: function(list) {
+            var self = this;
+            console.log(self);
+            var len = list.length;
+            self.$elem.append("<ul></ul>");
+            for (var n = 0; n < len; n++) {
+                self.$elem.children("ul").append("<li>" + list[n] + "</li>");
+            }
         },
 
 
@@ -128,6 +147,12 @@ if ( typeof Object.create !== 'function') {
         return this.each(function() {
             var sort = Object.create( Sort );
             sort.init(options, this);
+            if ($.isArray(sort.listType)){
+                sort.genList(sort.listType)
+            }
+            else if (typeof(sort.listType) === "object" ){
+                sort.genList(sort.randList(sort.listType.bottom, sort.listType.top, sort.listType.length));
+            }
             sort.bubble(sort.initList());
             sort.animation();
         });
@@ -135,8 +160,9 @@ if ( typeof Object.create !== 'function') {
 
     $.fn.animatedSort.options = {
         sortType: "bubble",
-        hlColor: "red",
-        stepTime: 1000
+        hlColor: "red",             // highlight color (none sets no highlight)
+        stepTime: 1000,             // ms between animation steps
+        listType: "existing"        // "existing", object for random , array
     }
 
 })(jQuery, window, document);
