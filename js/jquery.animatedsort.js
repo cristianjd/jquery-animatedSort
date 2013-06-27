@@ -17,6 +17,7 @@ if ( typeof Object.create !== 'function') {
             self.$elem = $(elem);
             self.options = $.extend({}, $.fn.animatedSort.options, options);
             self.hlColor = self.options.hlColor;
+            self.sortedColor = self.options.sortedColor;
             self.stepTime = self.options.stepTime;
             self.sortType = self.options.sortType;
             self.listType = self.options.listType;
@@ -47,7 +48,6 @@ if ( typeof Object.create !== 'function') {
 
         genList: function(list) {
             var self = this;
-            console.log(self);
             var len = list.length;
             self.$elem.append("<ul></ul>");
             for (var n = 0; n < len; n++) {
@@ -60,7 +60,7 @@ if ( typeof Object.create !== 'function') {
 
         highlight: function(iArray, hlColor){
             var self = this;
-            if (self.hlColor !== "none"){
+            if (hlColor !== "none"){
                 var colorTime = self.stepTime*(0.5);
                 var $liSel = self.numbers.eq(iArray[0]);
                 for (var n = 1; n < iArray.length; n++) {
@@ -138,7 +138,9 @@ if ( typeof Object.create !== 'function') {
                     }
                     self.highlight([i, i+1], self.initColor);
                 }
+                self.highlight([n-1], self.sortedColor);
             }
+            self.highlight([0], self.sortedColor);
         }
     };
 
@@ -161,6 +163,7 @@ if ( typeof Object.create !== 'function') {
     $.fn.animatedSort.options = {
         sortType: "bubble",
         hlColor: "red",             // highlight color (none sets no highlight)
+        sortedColor: "blue",        // sorted color (none sets to no highlight)
         stepTime: 1000,             // ms between animation steps
         listType: "existing"        // "existing", object for random , array
     }
