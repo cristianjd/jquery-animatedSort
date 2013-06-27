@@ -22,15 +22,24 @@
                 <div id="array">
                     <h2>Array to List</h2>
                     <button type="button" id="trigger">Sort</button>
-                    <button type="button" id="reset">Sort</button>
+                    <button type="button" id="reset">Reset</button>
                 </div>
                 <div id="random">
                     <h2>Random List</h2>
                 </div>
             </div>
             <div><h1>Selection Sort</h1>
-
-
+                <div id="selection">
+                    <ul>
+                        <li>263</li>
+                        <li>501</li>
+                        <li>811</li>
+                        <li>404</li>
+                        <li>98</li>
+                        <li>929</li>
+                        <li>13</li>
+                    </ul>
+                </div>
             </div>
 
 
@@ -61,6 +70,13 @@
                 hlColor: "red",
                 listType: {bottom: 0, top: 100, length: 7},
                 callback: function() {$(this).css("background-color", "gray")}
+            });
+
+            $("#selection").animatedSort({
+                stepTime: 600,
+                hlColor: "#05ef21",
+                sortedColor: "#aa0078",
+                sortType: "selection"
             });
 
         </script>

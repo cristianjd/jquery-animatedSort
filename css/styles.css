@@ -6,7 +6,7 @@ li {
     font-size: 2em;
 }
 
-#existing, #array, #random {
+#existing, #array, #random, #selection{
     display: inline-block;
     border: 1px solid black;
     width: 300px;

@@ -149,6 +149,28 @@ if ( typeof Object.create !== 'function') {
                 self.highlight([n-1], self.sortedColor);
             }
             self.highlight([0], self.sortedColor);
+        },
+
+        selection: function(list) {
+            var self = this;
+            var len = list.length;
+            for (var n = 0; n < len; n++){
+                var min = n;
+                self.highlight([n], self.hlColor);
+                for (var i = n+1; i < len; i++){
+                    self.highlight([i], self.hlColor);
+                    if (list[i] < list[min]){
+                        min = i;
+                    }
+                    self.highlight([i], self.initColor);
+                }
+                if (min !== n){
+                    self.highlight([min], self.hlColor);
+                    self.swap(list, n, min);
+                }
+                self.highlight([min, n], self.initColor);
+                self.highlight([n], self.sortedColor);
+            }
         }
     };
 
@@ -163,7 +185,7 @@ if ( typeof Object.create !== 'function') {
             else if (typeof(sort.listType) === "object" ){
                 sort.genList(sort.randList(sort.listType.bottom, sort.listType.top, sort.listType.length));
             }
-            sort.bubble(sort.initList()); // prepares animation to be executed (will need switch for diff algs.)
+            sort[sort.sortType](sort.initList()); // prepares animation to be executed (will need switch for diff algs.)
             if (typeof(sort.callback) === "function"){
                 var self = this;
                 sort.animSteps.push(function(){sort.callback.call(self)});
@@ -181,7 +203,7 @@ if ( typeof Object.create !== 'function') {
     };
 
     $.fn.animatedSort.options = {
-        sortType: "bubble",
+        sortType: "bubble",         // string for type of sort
         hlColor: "red",             // highlight color (none sets no highlight)
         sortedColor: "blue",        // sorted color (none sets to no highlight)
         stepTime: 1000,             // ms between animation steps
@@ -189,6 +211,7 @@ if ( typeof Object.create !== 'function') {
         animTrig: "none",           // animation trigger "none" loads on document, object for event and selector
         resetTrig: "none",          // trigger to reset and reinitialize
         callback: null              // callback after animation completes
+
     }
 
 })(jQuery, window, document);
