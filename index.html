@@ -41,17 +41,19 @@
             });
 
             $("#array").animatedSort({
-                stepTime: 600,
+                stepTime: 200,
                 hlColor: "green",
                 listType: [2, 19, 66, 5, 3, 79, 1],
                 sortedColor: "#2e7ca9",
-                trig: {event: "click", selector: "#trigger"}
+                animTrig: {event: "click", selector: "#trigger"},
+                callback: function() {$(this).css("background-color", "gray")}
             });
 
             $("#random").animatedSort({
-                stepTime: 600,
+                stepTime: 300,
                 hlColor: "red",
-                listType: {bottom: 0, top: 100, length: 7}
+                listType: {bottom: 0, top: 100, length: 7},
+                callback: function() {$(this).css("background-color", "gray")}
             });
 
         </script>

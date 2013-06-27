@@ -21,7 +21,8 @@ if ( typeof Object.create !== 'function') {
             self.stepTime = self.options.stepTime;
             self.sortType = self.options.sortType;
             self.listType = self.options.listType;
-            self.trig = self.options.trig;
+            self.animTrig = self.options.animTrig;
+            self.callback = self.options.callback;
             self.animSteps = [];
         },
 
@@ -36,6 +37,7 @@ if ( typeof Object.create !== 'function') {
                 list.push(Number($(this).text()));
                 $(this).css({"position": "relative", "top": 0, "left": 0});
             });
+            self.list = list;
             return list;
         },
 
@@ -45,6 +47,11 @@ if ( typeof Object.create !== 'function') {
                 list.push(Math.floor(Math.random()*(top-bottom)+bottom));
             }
             return list;
+        },
+
+        revList: function(list){
+            len = list.length;
+            for (var n = 0; n < len; n++){}
         },
 
         genList: function(list) {
@@ -156,12 +163,16 @@ if ( typeof Object.create !== 'function') {
             else if (typeof(sort.listType) === "object" ){
                 sort.genList(sort.randList(sort.listType.bottom, sort.listType.top, sort.listType.length));
             }
-            sort.bubble(sort.initList());
-            if (sort.trig === "none"){
+            sort.bubble(sort.initList()); // prepares animation to be executed
+            if (typeof(sort.callback) === "function"){
+                var self = this;
+                sort.animSteps.push(function(){sort.callback.call(self)});
+            }
+            if (sort.animTrig === "none"){
                 sort.animation();
             }
-            else if (typeof(sort.trig) === "object"){
-                $(document).on(sort.trig.event, sort.trig.selector, function() {
+            else if (typeof(sort.animTrig) === "object"){
+                $(document).on(sort.animTrig.event, sort.animTrig.selector, function() {
                     sort.animation();
                 });
             }
@@ -175,7 +186,9 @@ if ( typeof Object.create !== 'function') {
         sortedColor: "blue",        // sorted color (none sets to no highlight)
         stepTime: 1000,             // ms between animation steps
         listType: "existing",       // "existing", object for random , array
-        trig: "none"             // none loads on document, object for event and selector
+        animTrig: "none",           // animation trigger "none" loads on document, object for event and selector
+        resetTrig: "none",          // trigger to reset and reinitialize
+        callback: null              // callback after animation completes
     }
 
 })(jQuery, window, document);
