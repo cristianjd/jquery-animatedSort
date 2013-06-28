@@ -22,6 +22,7 @@ if ( typeof Object.create !== 'function') {
             self.sortType = self.options.sortType;
             self.listType = self.options.listType;
             self.animTrig = self.options.animTrig;
+            self.resetTrig = self.options.resetTrig;
             self.callback = self.options.callback;
             self.animSteps = [];
         },
@@ -37,7 +38,7 @@ if ( typeof Object.create !== 'function') {
                 list.push(Number($(this).text()));
                 $(this).css({"position": "relative", "top": 0, "left": 0});
             });
-            self.list = list;
+            self.list = list.slice(0);
             return list;
         },
 
@@ -196,6 +197,18 @@ if ( typeof Object.create !== 'function') {
             else if (typeof(sort.animTrig) === "object"){
                 $(document).on(sort.animTrig.event, sort.animTrig.selector, function() {
                     sort.animation();
+                });
+            }
+            if (typeof(sort.resetTrig) === "object"){
+                $(document).on(sort.resetTrig.event, sort.resetTrig.selector, function() {
+
+                    console.log(sort.list);
+                    sort.animSteps = [];
+                    sort.$elem.find("ul").eq(0).remove();
+                    if (sort.listType === "existing") {
+                        sort.options.listType = sort.list;
+                    }
+                    sort.$elem.animatedSort(sort.options);
                 });
             }
 

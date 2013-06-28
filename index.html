@@ -9,6 +9,8 @@
             <div><h1>Bubble Sort</h1>
                 <div id="existing">
                     <h2>Preexisting List</h2>
+                    <button type="button" id="extrig">Sort</button>
+                    <button type="button" id="exres">Reset</button>
                     <ul>
                         <li>23</li>
                         <li>51</li>
@@ -21,14 +23,18 @@
                 </div>
                 <div id="array">
                     <h2>Array to List</h2>
-                    <button type="button" id="trigger">Sort</button>
-                    <button type="button" id="reset">Reset</button>
+                    <button type="button" id="arrtrig">Sort</button>
+                    <button type="button" id="arrres">Reset</button>
                 </div>
                 <div id="random">
                     <h2>Random List</h2>
+                    <button type="button" id="rantrig">Sort</button>
+                    <button type="button" id="ranres">Reset</button>
                 </div>
             </div>
             <div><h1>Selection Sort</h1>
+                <button type="button" id="seltrig">Sort</button>
+                <button type="button" id="selres">Reset</button>
                 <div id="selection">
                     <ul>
                         <li>263</li>
@@ -53,7 +59,9 @@
             $("#existing").animatedSort({
                 stepTime: 600,
                 hlColor: "none",
-                sortedColor: "none"
+                sortedColor: "none",
+                animTrig: {event: "click", selector: "#extrig"},
+                resetTrig: {event: "click", selector: "#exres"}
             });
 
             $("#array").animatedSort({
@@ -61,7 +69,8 @@
                 hlColor: "green",
                 listType: [2, 19, 66, 5, 3, 79, 1],
                 sortedColor: "#2e7ca9",
-                animTrig: {event: "click", selector: "#trigger"},
+                animTrig: {event: "click", selector: "#arrtrig"},
+                resetTrig: {event: "click", selector: "#arrres"},
                 callback: function() {$(this).css("background-color", "gray")}
             });
 
@@ -69,14 +78,18 @@
                 stepTime: 300,
                 hlColor: "red",
                 listType: {bottom: 0, top: 100, length: 7},
-                callback: function() {$(this).css("background-color", "gray")}
+                callback: function() {$(this).css("background-color", "gray")},
+                animTrig: {event: "click", selector: "#rantrig"},
+                resetTrig: {event: "click", selector: "#ranres"}
             });
 
             $("#selection").animatedSort({
                 stepTime: 600,
                 hlColor: "#05ef21",
                 sortedColor: "#aa0078",
-                sortType: "selection"
+                sortType: "selection",
+                animTrig: {event: "click", selector: "#seltrig"},
+                resetTrig: {event: "click", selector: "#selres"}
             });
 
         </script>
