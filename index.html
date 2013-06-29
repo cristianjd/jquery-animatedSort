@@ -32,10 +32,10 @@
                     <button type="button" id="ranres">Reset</button>
                 </div>
             </div>
-            <div><h1>Selection Sort</h1>
-                <button type="button" id="seltrig">Sort</button>
-                <button type="button" id="selres">Reset</button>
-                <div id="selection">
+            <div>
+               <div id="selection"><h2>Selection Sort</h2>
+                   <button type="button" id="seltrig">Sort</button>
+                   <button type="button" id="selres">Reset</button>
                     <ul>
                         <li>263</li>
                         <li>501</li>
@@ -45,6 +45,12 @@
                         <li>929</li>
                         <li>13</li>
                     </ul>
+                </div>
+            </div>
+            <div>
+                <div id="insertion"><h2>Insertion Sort</h2>
+                    <button type="button" id="intrig">Sort</button>
+                    <button type="button" id="inres">Reset</button>
                 </div>
             </div>
 
@@ -91,6 +97,18 @@
                 animTrig: {event: "click", selector: "#seltrig"},
                 resetTrig: {event: "click", selector: "#selres"}
             });
+
+            $("#insertion").animatedSort({
+                stepTime: 300,
+                hlColor: "gray",
+                listType: [5, 9, 1, 0, 8, 2, 3],
+                sortedColor: "#e4701d",
+                sortType: "insertion",
+                animTrig: {event: "click", selector: "#intrig"},
+                resetTrig: {event: "click", selector: "#inres"}
+            });
+
+
 
         </script>
 

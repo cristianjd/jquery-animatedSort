@@ -6,8 +6,11 @@ li {
     font-size: 2em;
 }
 
-#existing, #array, #random, #selection{
-    display: inline-block;
+#existing, #array, #random, #selection, #insertion{
     border: 1px solid black;
     width: 300px;
+}
+
+div {
+    display: inline-block;
 }

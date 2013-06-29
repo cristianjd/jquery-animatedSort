@@ -34,6 +34,8 @@ if ( typeof Object.create !== 'function') {
             var self = this;
             self.numbers = self.$elem.find("li");
             self.initColor = self.numbers.eq(0).css("color");
+            self.initFontSize = self.numbers.eq(0).css("font-size");
+            self.slideDis = Number(self.initFontSize.substring(0, self.initFontSize.length-2))*2.5;
             self.$elem.find("li").each(function() {
                 list.push(Number($(this).text()));
                 $(this).css({"position": "relative", "top": 0, "left": 0});
@@ -48,11 +50,6 @@ if ( typeof Object.create !== 'function') {
                 list.push(Math.floor(Math.random()*(top-bottom)+bottom));
             }
             return list;
-        },
-
-        revList: function(list){
-            len = list.length;
-            for (var n = 0; n < len; n++){}
         },
 
         genList: function(list) {
@@ -76,10 +73,22 @@ if ( typeof Object.create !== 'function') {
                     $liSel = $liSel.add(self.numbers.eq(iArray[n]));
                 }
                 self.animSteps.push(function() {
-                    $liSel.animate({color: hlColor}, colorTime);//css("color", hlColor);
+                    $liSel.animate({color: hlColor}, colorTime);  //css("color", hlColor) if no color animate;
                 });
             }
 
+        },
+
+        slide: function(iArray, distance){
+            var self = this;
+            var slideTime = self.stepTime*(2/3);
+            var $liSel = self.numbers.eq(iArray[0]);
+            for (var n = 1; n < iArray.length; n++){
+                $liSel = $liSel.add(self.numbers.eq(iArray[n]));
+            }
+            self.animSteps.push(function() {
+                $liSel.animate({left: distance}, slideTime);
+            });
         },
 
         swap: function(list, i1, i2) {
@@ -98,10 +107,7 @@ if ( typeof Object.create !== 'function') {
             var slideTime = self.stepTime*(2/3);
 
             // add animation functions to array
-            self.animSteps.push(function(){
-                //slide out
-                $li1.add($li2).animate({left: 80}, slideTime);
-            }, function() {
+            self.animSteps.push(function() {
                // position and value variables
                 var li1_val = $li1.text();
                 var li2_val = $li2.text();
@@ -117,9 +123,6 @@ if ( typeof Object.create !== 'function') {
                     $li2.css("top", 0);
                     $li2.text(li1_val);
                 });
-            }, function() {
-                // slide in
-                $li1.add($li2).animate({left: 0}, slideTime);
             });
         },
 
@@ -143,7 +146,9 @@ if ( typeof Object.create !== 'function') {
                 for (var i = 0; i < n-1; ++i) {
                     self.highlight([i, i+1], self.hlColor);
                     if (list[i] > list[i+1]) {
+                        self.slide([i, i+1], self.slideDis);
                         self.swap(list, i, i+1);
+                        self.slide([i, i+1], 0);
                     }
                     self.highlight([i, i+1], self.initColor);
                 }
@@ -167,11 +172,17 @@ if ( typeof Object.create !== 'function') {
                 }
                 if (min !== n){
                     self.highlight([min], self.hlColor);
+                    self.slide([n, min], self.slideDis);
                     self.swap(list, n, min);
+                    self.slide([n, min], 0);
                 }
                 self.highlight([min, n], self.initColor);
                 self.highlight([n], self.sortedColor);
             }
+        },
+
+        insertion: function(list) {
+
         }
     };
 
