@@ -113,14 +113,18 @@ if ( typeof Object.create !== 'function') {
                 var li2_val = $li2.text();
                 var li1_pos = $li1.position().top;
                 var li2_pos = $li2.position().top;
+                var li1_left = $li1.css("left");
+                var li2_left = $li2.css("left");
+                var li1_color = $li1.css("color");
+                var li2_color = $li2.css("color");
 
                 // animate swap
                 $li1.animate({top: li2_pos-li1_pos}, slideTime, function() {
-                    $li1.css("top", 0);
+                    $li1.css({top: 0, left: li2_left, color: li2_color});
                     $li1.text(li2_val);
                 });
                 $li2.animate({top: li1_pos-li2_pos}, slideTime, function() {
-                    $li2.css("top", 0);
+                    $li2.css({top: 0, left: li1_left, color: li1_color});
                     $li2.text(li1_val);
                 });
             });
@@ -182,7 +186,26 @@ if ( typeof Object.create !== 'function') {
         },
 
         insertion: function(list) {
+            var self = this;
+            var len = list.length;
+            for (var n = 0; n < len; n++){
+                var val = list[n];
+                var pos = n;
+                self.highlight([n], self.hlColor);
+                if (val < list[n-1]){
+                    self.slide([pos], self.slideDis);
+                    for (var i = n-1; i >= 0; i--){
+                        if (val < list[i]){
 
+                            self.swap(list, i+1, i);
+                            pos = i;
+                        }
+                    }
+                    self.slide([pos], 0);
+                }
+                self.highlight([pos], self.initColor);
+                self.highlight([pos], self.sortedColor);
+            }
         }
     };
 
