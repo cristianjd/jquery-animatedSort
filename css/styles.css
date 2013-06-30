@@ -1,9 +1,23 @@
 ul {
     list-style-type: none;
+    margin-top: 25px;
 }
 
 li {
     font-size: 2em;
+    margin-bottom: 15px;
+}
+
+h1 {
+   text-align: center;
+}
+
+h2 {
+    text-align: center;
+}
+
+body {
+    background-color: #ebebeb;
 }
 
 #existing, #array, #random, #selection, #insertion{
@@ -13,4 +27,10 @@ li {
 
 div {
     display: inline-block;
+}
+
+#container {
+    display: block;
+    position: relative;
+    margin-left: 40px;
 }

@@ -18,6 +18,7 @@ if ( typeof Object.create !== 'function') {
             self.options = $.extend({}, $.fn.animatedSort.options, options);
             self.hlColor = self.options.hlColor;
             self.sortedColor = self.options.sortedColor;
+            self.animColor = self.options.animColor;
             self.stepTime = self.options.stepTime;
             self.sortType = self.options.sortType;
             self.listType = self.options.listType;
@@ -35,7 +36,7 @@ if ( typeof Object.create !== 'function') {
             self.numbers = self.$elem.find("li");
             self.initColor = self.numbers.eq(0).css("color");
             self.initFontSize = self.numbers.eq(0).css("font-size");
-            self.slideDis = Number(self.initFontSize.substring(0, self.initFontSize.length-2))*2.5;
+            self.slideDis = Number(self.initFontSize.substring(0, self.initFontSize.length-2))*2;
             self.$elem.find("li").each(function() {
                 list.push(Number($(this).text()));
                 $(this).css({"position": "relative", "top": 0, "left": 0});
@@ -61,7 +62,6 @@ if ( typeof Object.create !== 'function') {
             }
         },
 
-
         // Animation Function Definitions
 
         highlight: function(iArray, hlColor){
@@ -73,7 +73,11 @@ if ( typeof Object.create !== 'function') {
                     $liSel = $liSel.add(self.numbers.eq(iArray[n]));
                 }
                 self.animSteps.push(function() {
-                    $liSel.animate({color: hlColor}, colorTime);  //css("color", hlColor) if no color animate;
+                    if (self.animColor){
+                        $liSel.animate({color: hlColor}, colorTime);
+                    } else {
+                        $liSel.css("color", hlColor);
+                    }
                 });
             }
 
@@ -253,6 +257,7 @@ if ( typeof Object.create !== 'function') {
         sortType: "bubble",         // string for type of sort
         hlColor: "red",             // highlight color (none sets no highlight)
         sortedColor: "blue",        // sorted color (none sets to no highlight)
+        animColor: true,            // whether or not color should be animated (requires jquery.color.js or jquery ui)
         stepTime: 1000,             // ms between animation steps
         listType: "existing",       // "existing", object for random , array
         animTrig: "none",           // animation trigger "none" loads on document, object for event and selector
