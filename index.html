@@ -8,12 +8,14 @@
         </head>
 
         <body>
-        <h1>Animated Sort jQuery Plugin</h1>
+        <h1>Animated Sort jQuery Plugin</h1> <br/>
             <div id="container">
-                <div id="existing">
-                    <h2>Preexisting List</h2>
-                    <button type="button" class="btn btn-primary" id="extrig">Sort</button>
-                    <button type="button" class="btn" id="exres">Reset</button>
+                <div id="bubble">
+                    <h2>Bubble Sort</h2>
+                    <div class="buttons">
+                        <button type="button" class="btn btn-primary" id="bubtrig">Sort</button>
+                        <button type="button" class="btn" id="bubres">Reset</button>
+                    </div>
                     <ul>
                         <li>23</li>
                         <li>51</li>
@@ -22,91 +24,76 @@
                         <li>8</li>
                         <li>99</li>
                         <li>3</li>
+                        <li>62</li>
+                        <li>33</li>
+                        <li>16</li>
+                        <li>70</li>
+                        <li>85</li>
                     </ul>
                 </div>
-                <div id="array">
-                    <h2>Array to List</h2>
-                    <button type="button" class="btn btn-primary"  id="arrtrig">Sort</button>
-                    <button type="button" class="btn" id="arrres">Reset</button>
-                </div>
-                <div id="random">
-                    <h2>Random List</h2>
-                    <button type="button" class="btn btn-primary"  id="rantrig">Sort</button>
-                    <button type="button" class="btn" id="ranres">Reset</button>
-                </div>
-
                <div id="selection"><h2>Selection Sort</h2>
-                   <button type="button" class="btn btn-primary"  id="seltrig">Sort</button>
-                   <button type="button" class="btn" id="selres">Reset</button>
-                    <ul>
-                        <li>263</li>
-                        <li>501</li>
-                        <li>811</li>
-                        <li>404</li>
-                        <li>98</li>
-                        <li>929</li>
-                        <li>13</li>
-                    </ul>
+                   <div class="buttons">
+                    <button type="button" class="btn btn-primary"  id="seltrig">Sort</button>
+                    <button type="button" class="btn" id="selres">Reset</button>
+                   </div>
                </div>
                <div id="insertion"><h2>Insertion Sort</h2>
-                    <button type="button" class="btn btn-primary" id="intrig">Sort</button>
+                   <div class="buttons">
+                   <button type="button" class="btn btn-primary" id="intrig">Sort</button>
                     <button type="button" class="btn" id="inres">Reset</button>
+                   </div>
                </div>
+                <div id="quick"><h2>Quick Sort</h2>
+                    <div class="buttons">
+                        <button type="button" class="btn btn-primary" id="qtrig">Sort</button>
+                        <button type="button" class="btn" id="qres">Reset</button>
+                    </div>
+                </div>
             </div>
 
 
 
 
-        <script src="js/jquery-1.10.1.min.js" ></script>
-        <script src="js/jquery.animatedsort.js"></script>
-        <script src="js/jquery.color.js"></script>
+        <script src="src/jquery-1.10.1.min.js" ></script>
+        <script src="src/jquery.animatedsort.js"></script>
+        <script src="src/jquery.color.js"></script>
         <script>
 
-            $("#existing").animatedSort({
-                stepTime: 600,
-                highlightColor: "none",
-                sortedColor: "none",
-                animTrig: {event: "click", selector: "#extrig"},
-                resetTrig: {event: "click", selector: "#exres"}
-            });
-
-            $("#array").animatedSort({
+            $("#bubble").animatedSort({
                 stepTime: 1000,
-                highlightColor: "green",
-                listType: [2, 19, 66, 5, 3, 79, 1],
-                sortedColor: "#2e7ca9",
-                animColor: false,
-                animTrig: {event: "click", selector: "#arrtrig"},
-                resetTrig: {event: "click", selector: "#arrres"},
-                callback: function() {$(this).css("background-color", "gray")}
-            });
-
-            $("#random").animatedSort({
-                stepTime: 300,
-                highlightColor: "red",
-                listType: {bottom: 0, top: 100, length: 7},
-                callback: function() {$(this).css("background-color", "gray")},
-                animTrig: {event: "click", selector: "#rantrig"},
-                resetTrig: {event: "click", selector: "#ranres"}
+                animTrig: {event: "click", selector: "#bubtrig"},
+                resetTrig: {event: "click", selector: "#bubres"}
             });
 
             $("#selection").animatedSort({
-                stepTime: 600,
+                listType: [2, 19, 66, 5, 3, 79, 1, 8, 25, 64, 86, 34],
+                stepTime: 300,
                 highlightColor: "#05ef21",
                 sortedColor: "#aa0078",
                 sortType: "selection",
                 animTrig: {event: "click", selector: "#seltrig"},
-                resetTrig: {event: "click", selector: "#selres"}
+                resetTrig: {event: "click", selector: "#selres"},
+                callback: function() {$(this).css("background-color", "gray")}
             });
 
             $("#insertion").animatedSort({
-                stepTime: 1000,
-                highlightColor: "gray",
-                listType: [55, 5, 9, 20, 8, 2, 43],
+                stepTime: 600,
+                highlightColor: "teal",
+                listType: {bottom: 0, top: 100, length: 12},
                 sortedColor: "#e4701d",
                 sortType: "insertion",
                 animTrig: {event: "click", selector: "#intrig"},
                 resetTrig: {event: "click", selector: "#inres"}
+            });
+
+            $("#quick").animatedSort({
+                stepTime: 1000,
+                highlightColor: "purple",
+                listType: {bottom: 0, top: 100, length: 12},
+                sortedColor: "white",
+                sortType: "quick",
+                animTrig: {event: "click", selector: "#qtrig"},
+                resetTrig: {event: "click", selector: "#qres"}
             });
 
 

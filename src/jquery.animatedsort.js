@@ -23,6 +23,9 @@ if ( typeof Object.create !== 'function') {
             self.sortedColor = self.options.sortedColor;
             self.animColor = self.options.animColor;
             self.stepTime = self.options.stepTime;
+            self.slideTime = self.stepTime*(2.0/3);
+            self.swapTime = self.stepTime*(15.0/24);
+            self.colorTime = self.stepTime*(0.5);
             self.sortType = self.options.sortType;
             self.listType = self.options.listType;
             self.animTrig = self.options.animTrig;
@@ -40,7 +43,6 @@ if ( typeof Object.create !== 'function') {
             self.initColor = self.numbers.eq(0).css("color");
             self.initFontSize = self.numbers.eq(0).css("font-size");
             self.slideDis = Number(self.initFontSize.substring(0, self.initFontSize.length-2))*2;
-            self.slideTime = self.stepTime*(2/3);
             self.$elem.find("li").each(function() {
                 list.push(Number($(this).text()));
                 $(this).css({"position": "relative", "top": 0, "left": 0});
@@ -75,14 +77,13 @@ if ( typeof Object.create !== 'function') {
         highlight: function(array, color){
             var self = this;
             if (color !== "none"){
-                var colorTime = self.stepTime*(0.5);
                 var $liSel = self.numbers.eq(array[0]);
                 for (var n = 1; n < array.length; n++) {
                     $liSel = $liSel.add(self.numbers.eq(array[n]));
                 }
                 self.animSteps.push(function() {
                     if (self.animColor){
-                        $liSel.animate({color: color}, colorTime);
+                        $liSel.animate({color: color}, self.colorTime);
                     } else {
                         $liSel.css("color", color);
                     }
@@ -101,7 +102,7 @@ if ( typeof Object.create !== 'function') {
             self.highlight(array, self.sortedColor);
         },
 
-        removeHighlight: function(array) {
+        removeColor: function(array) {
         var self = this;
         self.highlight(array, self.initColor);
         },
@@ -152,11 +153,11 @@ if ( typeof Object.create !== 'function') {
                 var li2_color = $li2.css("color");
 
                 // animate swap
-                $li1.animate({top: li2_pos-li1_pos}, self.slideTime, function() {
+                $li1.animate({top: li2_pos-li1_pos}, self.swapTime, function() {
                     $li1.css({top: 0, left: li2_left, color: li2_color});
                     $li1.text(li2_val);
                 });
-                $li2.animate({top: li1_pos-li2_pos}, self.slideTime, function() {
+                $li2.animate({top: li1_pos-li2_pos}, self.swapTime, function() {
                     $li2.css({top: 0, left: li1_left, color: li1_color});
                     $li2.text(li1_val);
                 });
@@ -187,7 +188,7 @@ if ( typeof Object.create !== 'function') {
                         self.swap(list, i, i+1);
                         self.slideIn([i, i+1]);
                     }
-                    self.removeHighlight([i, i+1]);
+                    self.removeColor([i, i+1]);
                 }
                 self.addSortedColor([i, i+1]);
             }
@@ -205,7 +206,7 @@ if ( typeof Object.create !== 'function') {
                     if (list[i] < list[min]){
                         min = i;
                     }
-                    self.removeHighlight([i]);
+                    self.removeColor([i]);
                 }
                 if (min !== n){
                     self.addHighlightColor([min]);
@@ -213,7 +214,7 @@ if ( typeof Object.create !== 'function') {
                     self.swap(list, n, min);
                     self.slideIn([n, min]);
                 }
-                self.removeHighlight([min, n]);
+                self.removeColor([min, n]);
                 self.addSortedColor([n]);
             }
         },
@@ -236,9 +237,44 @@ if ( typeof Object.create !== 'function') {
                     }
                     self.slideIn([pos]);
                 }
-                self.removeHighlight([pos]);
+                self.removeColor([pos]);
                 self.addSortedColor([pos]);
             }
+        },
+
+        quick: function(list) {
+            var self = this;
+            var len = list.length;
+            function partition(array, begin, end, pivot) {
+                var piv = array[pivot];
+                self.swap(array, pivot, end-1);
+                var store = begin;
+                for (var n = begin; n < end-1; n++) {
+                    //self.addHighlightColor([end-1, n]);
+                    if (array[n] <= piv) {
+                        self.swap(array, store, n);
+                        store++;
+                    }
+                    //self.removeColor([end-1, n]);
+                }
+                self.swap(array, end-1, store);
+                return store;
+            }
+
+            function qsort(array, begin, end) {
+                if (end-1 > begin) {
+                    var pivot = begin+Math.floor(Math.random()*(end-begin));
+                    //var pivot = begin;
+                    pivot = partition(array, begin, end, pivot);
+
+                    qsort(array, begin, pivot);
+                    qsort(array, pivot+1, end);
+                }
+            }
+
+            qsort(list, 0, len);
+            //partition(list, 0, len, 0);
+            //console.log(list);
         }
     };
 
@@ -284,9 +320,9 @@ if ( typeof Object.create !== 'function') {
 
     $.fn.animatedSort.options = {
         sortType: "bubble",         // string for type of sort
-        highlightColor: "red",             // highlight color (none sets no highlight)
+        highlightColor: "red",      // highlight color (none sets no highlight)
         sortedColor: "blue",        // sorted color (none sets to no highlight)
-        animColor: true,            // whether or not color should be animated (requires jquery.color.js or jquery ui)
+        animColor: true,            // whether or not color should be animated (requires jquery.color.src or jquery ui)
         stepTime: 1000,             // ms between animation steps
         listType: "existing",       // "existing", object for random , array
         animTrig: "none",           // animation trigger "none" loads on document, object for event and selector
