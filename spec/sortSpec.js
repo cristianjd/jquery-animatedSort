@@ -10,7 +10,7 @@ describe("Animated Sort Plugin", function() {
         describe("existing list", function() {
             it("correctly initializes margins", function() {
                 $('#existing').animatedSort();
-                expect($('#existing')).toHaveListCss([0,1,2,3,4,5,6,7,8,9,10,11], {position: "relative", top: "0px", left: "0px"});
+                expect($('#existing')).toHaveListCss("all", {position: "relative", top: "0px", left: "0px"});
             });
         });
 
@@ -29,41 +29,95 @@ describe("Animated Sort Plugin", function() {
         });
     });
 
-    describe("sort types", function() {
+    describe("sort algorithms", function() {
 
-        describe("bubble sort", function() {
-            it("correctly sorts list", function() {
-                jasmine.Clock.useMock();
-                $('#existing').animatedSort({sortType: "bubble", stepTime: 1});
+        expectListToBeSortedWith("bubble");
+        expectListToBeSortedWith("selection");
+        expectListToBeSortedWith("insertion");
+        expectListToBeSortedWith("quick");
+    });
+
+    describe("colors", function() {
+
+        describe("sorted color", function() {
+            it("is applied to all items in sorted list", function() {
+                $('#existing').animatedSort({stepTime: 1});
                 jasmine.Clock.tick(10000);
-                expect($('#existing')).toHaveListItems([3,8,11,16,23,33,44,51,62,70,85,99])
+                expect($('#existing')).toHaveListCss("all", {color: "rgb(0, 0, 255)"});
             });
         });
 
-        describe("selection sort", function() {
-            it("correctly sorts list", function() {
-                jasmine.Clock.useMock();
-                $('#existing').animatedSort({sortType: "selection", stepTime: 1});
-                jasmine.Clock.tick(10000);
-                expect($('#existing')).toHaveListItems([3,8,11,16,23,33,44,51,62,70,85,99])
+        describe("highlight color", function() {
+            it("is applied to compared item", function() {
+                $('#existing').animatedSort({stepTime: 100});
+                jasmine.Clock.tick(350);
+                expect($('#existing')).toHaveListCss([1], {color: 'rgb(255, 0, 0)'});
+            });
+        });
+    });
+
+    describe("triggers", function() {
+
+        describe("animation trigger", function() {
+            beforeEach(function() {
+                $('#existing').animatedSort({stepTime: 1, animationTrigger: {event: "click", selector: "#new"}});
+                jasmine.Clock.tick(1000);
+            });
+
+            describe("before trigger", function() {
+                it("list should be in initial state", function() {
+                    expectListToNotBeSorted();
+                });
+            });
+
+            describe("after trigger", function() {
+                it("list should be sorted", function() {
+                    $('#new').trigger("click");
+                    jasmine.Clock.tick(10000);
+                    expectListToBeSorted();
+                });
             });
         });
 
-        describe("insertion sort", function() {
-            it("correctly sorts list", function() {
-                jasmine.Clock.useMock();
-                $('#existing').animatedSort({sortType: "insertion", stepTime: 1});
-                jasmine.Clock.tick(10000);
-                expect($('#existing')).toHaveListItems([3,8,11,16,23,33,44,51,62,70,85,99])
+        describe("reset trigger", function() {
+            beforeEach(function() {
+                $('#existing').animatedSort({stepTime: 1, resetTrigger: {event: "click", selector: "#new"}});
+                jasmine.Clock.tick(1000);
+            });
+
+            describe("before trigger", function() {
+                it("list should be sorted", function() {
+                    expectListToBeSorted();
+                });
+            });
+
+            describe("after trigger", function() {
+                it("list should return to initial state", function() {
+                    $('#new').trigger("click");
+                    jasmine.Clock.tick(1);
+                    expectListToNotBeSorted();
+                });
+            });
+        });
+    });
+
+    describe("callback", function() {
+        var callback;
+
+        beforeEach(function() {
+            callback = jasmine.createSpy();
+            $('#existing').animatedSort({stepTime: 1, callback: callback});
+        });
+        describe("before animation", function() {
+            it("callback should not be called", function() {
+                expect(callback).not.toHaveBeenCalled();
             });
         });
 
-        describe("quick sort", function() {
-            it("correctly sorts list", function() {
-                jasmine.Clock.useMock();
-                $('#existing').animatedSort({sortType: "quick", stepTime: 1});
+        describe("after animation", function() {
+            it("callback should be called", function() {
                 jasmine.Clock.tick(10000);
-                expect($('#existing')).toHaveListItems([3,8,11,16,23,33,44,51,62,70,85,99])
+                expect(callback).toHaveBeenCalled();
             });
         });
     });

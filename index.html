@@ -61,8 +61,8 @@
 
             $("#bubble").animatedSort({
                 stepTime: 1000,
-                animTrig: {event: "click", selector: "#bubtrig"},
-                resetTrig: {event: "click", selector: "#bubres"}
+                animationTrigger: {event: "click", selector: "#bubtrig"},
+                resetTrigger: {event: "click", selector: "#bubres"}
             });
 
             $("#selection").animatedSort({
@@ -70,9 +70,9 @@
                 stepTime: 300,
                 highlightColor: "#05ef21",
                 sortedColor: "#aa0078",
-                sortType: "selection",
-                animTrig: {event: "click", selector: "#seltrig"},
-                resetTrig: {event: "click", selector: "#selres"},
+                sortAlgorithm: "selection",
+                animationTrigger: {event: "click", selector: "#seltrig"},
+                resetTrigger: {event: "click", selector: "#selres"},
                 callback: function() {$(this).css("background-color", "gray")}
             });
 
@@ -81,9 +81,9 @@
                 highlightColor: "teal",
                 listType: {bottom: 0, top: 100, length: 12},
                 sortedColor: "#e4701d",
-                sortType: "insertion",
-                animTrig: {event: "click", selector: "#intrig"},
-                resetTrig: {event: "click", selector: "#inres"}
+                sortAlgorithm: "insertion",
+                animationTrigger: {event: "click", selector: "#intrig"},
+                resetTrigger: {event: "click", selector: "#inres"}
             });
 
             $("#quick").animatedSort({
@@ -91,9 +91,9 @@
                 highlightColor: "purple",
                 listType: {bottom: 0, top: 100, length: 12},
                 sortedColor: "white",
-                sortType: "quick",
-                animTrig: {event: "click", selector: "#qtrig"},
-                resetTrig: {event: "click", selector: "#qres"}
+                sortAlgorithm: "quick",
+                animationTrigger: {event: "click", selector: "#qtrig"},
+                resetTrigger: {event: "click", selector: "#qres"}
             });
 
 

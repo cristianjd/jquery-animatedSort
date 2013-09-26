@@ -21,15 +21,15 @@ if ( typeof Object.create !== 'function') {
             self.options = $.extend({}, $.fn.animatedSort.options, options);
             self.highlightColor = self.options.highlightColor;
             self.sortedColor = self.options.sortedColor;
-            self.animColor = self.options.animColor;
+            self.animateColor = jQuery.Color ? true : false;
             self.stepTime = self.options.stepTime;
             self.slideTime = self.stepTime*(2.0/3);
             self.swapTime = self.stepTime*(15.0/24);
             self.colorTime = self.stepTime*(0.5);
-            self.sortType = self.options.sortType;
+            self.sortAlgorithm = self.options.sortAlgorithm;
             self.listType = self.options.listType;
-            self.animTrig = self.options.animTrig;
-            self.resetTrig = self.options.resetTrig;
+            self.animationTrigger = self.options.animationTrigger;
+            self.resetTrigger = self.options.resetTrigger;
             self.callback = self.options.callback;
             self.animSteps = [];
         },
@@ -40,9 +40,9 @@ if ( typeof Object.create !== 'function') {
             var list = [];
             var self = this;
             self.numbers = self.$elem.find("li");
-            self.initColor = self.numbers.eq(0).css("color");
-            self.initFontSize = self.numbers.eq(0).css("font-size");
-            self.slideDis = Number(self.initFontSize.substring(0, self.initFontSize.length-2))*2;
+            self.initialColor = self.numbers.eq(0).css("color");
+            self.initialFontSize = self.numbers.eq(0).css("font-size");
+            self.slideDistance = Number(self.initialFontSize.substring(0, self.initialFontSize.length-2))*2;
             self.$elem.find("li").each(function() {
                 list.push(Number($(this).text()));
                 $(this).css({"position": "relative", "top": 0, "left": 0});
@@ -82,7 +82,8 @@ if ( typeof Object.create !== 'function') {
                     $liSel = $liSel.add(self.numbers.eq(array[n]));
                 }
                 self.animSteps.push(function() {
-                    if (self.animColor){
+                    //animate colors if jquery color plugin is present
+                    if (self.animateColor){
                         $liSel.animate({color: color}, self.colorTime);
                     } else {
                         $liSel.css("color", color);
@@ -104,7 +105,7 @@ if ( typeof Object.create !== 'function') {
 
         removeColor: function(array) {
         var self = this;
-        self.highlight(array, self.initColor);
+        self.highlight(array, self.initialColor);
         },
 
         slide: function(array, distance){
@@ -120,7 +121,7 @@ if ( typeof Object.create !== 'function') {
 
         slideOut: function(array) {
             var self = this;
-            self.slide(array, self.slideDis);
+            self.slide(array, self.slideDistance);
         },
 
         slideIn: function(array) {
@@ -250,12 +251,10 @@ if ( typeof Object.create !== 'function') {
                 self.swap(array, pivot, end-1);
                 var store = begin;
                 for (var n = begin; n < end-1; n++) {
-                    //self.addHighlightColor([end-1, n]);
                     if (array[n] <= piv) {
                         self.swap(array, store, n);
                         store++;
                     }
-                    //self.removeColor([end-1, n]);
                 }
                 self.swap(array, end-1, store);
                 return store;
@@ -264,7 +263,6 @@ if ( typeof Object.create !== 'function') {
             function qsort(array, begin, end) {
                 if (end-1 > begin) {
                     var pivot = begin+Math.floor(Math.random()*(end-begin));
-                    //var pivot = begin;
                     pivot = partition(array, begin, end, pivot);
 
                     qsort(array, begin, pivot);
@@ -273,8 +271,6 @@ if ( typeof Object.create !== 'function') {
             }
 
             qsort(list, 0, len);
-            //partition(list, 0, len, 0);
-            //console.log(list);
         }
     };
 
@@ -289,24 +285,21 @@ if ( typeof Object.create !== 'function') {
             else if (typeof(sort.listType) === "object" ){
                 sort.genList(sort.randList(sort.listType.bottom, sort.listType.top, sort.listType.length));
             }
-            sort[sort.sortType](sort.initList()); // prepares animation to be executed (will need switch for diff algs.)
+            sort[sort.sortAlgorithm](sort.initList()); // prepares animation to be executed (will need switch for diff algs.)
             if (typeof(sort.callback) === "function"){
                 var self = this;
                 sort.animSteps.push(function(){sort.callback.call(self)});
             }
-            if (sort.animTrig === "none"){
+            if (sort.animationTrigger === "none"){
                 sort.animation();
             }
-            else if (typeof(sort.animTrig) === "object"){
-                $(document).on(sort.animTrig.event, sort.animTrig.selector, function() {
+            else if (typeof(sort.animationTrigger) === "object"){
+                $(document).on(sort.animationTrigger.event, sort.animationTrigger.selector, function() {
                     sort.animation();
                 });
             }
-            if (typeof(sort.resetTrig) === "object"){
-                $(document).on(sort.resetTrig.event, sort.resetTrig.selector, function() {
-
-                    console.log(sort.list);
-                    sort.animSteps = [];
+            if (typeof(sort.resetTrigger) === "object"){
+                $(document).on(sort.resetTrigger.event, sort.resetTrigger.selector, function() {
                     sort.$elem.find("ul").eq(0).remove();
                     if (sort.listType === "existing") {
                         sort.options.listType = sort.list;
@@ -319,16 +312,14 @@ if ( typeof Object.create !== 'function') {
     };
 
     $.fn.animatedSort.options = {
-        sortType: "bubble",         // string for type of sort
+        sortAlgorithm: "bubble",    // string for type of sort
         highlightColor: "red",      // highlight color (none sets no highlight)
         sortedColor: "blue",        // sorted color (none sets to no highlight)
-        animColor: true,            // whether or not color should be animated (requires jquery.color.src or jquery ui)
         stepTime: 1000,             // ms between animation steps
         listType: "existing",       // "existing", object for random , array
-        animTrig: "none",           // animation trigger "none" loads on document, object for event and selector
-        resetTrig: "none",          // trigger to reset and reinitialize
+        animationTrigger: "none",   // animation trigger "none" loads on document, object for event and selector
+        resetTrigger: "none",       // trigger to reset and reinitialize
         callback: null              // callback after animation completes
-
-    }
+    };
 
 })(jQuery, window, document);

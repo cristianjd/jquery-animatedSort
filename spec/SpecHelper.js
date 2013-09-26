@@ -21,13 +21,26 @@ beforeEach(function() {
             return true;
         },
         toHaveListCss: function (indices, cssObj) {
-            var len = indices.length;
             var list = this.actual.find('li');
+            var len, all, item;
+            if (typeof(indices) === "string") {
+                len = list.length;
+                all = true;
+            }
+            else {
+                len = indices.length;
+                all = false;
+            }
             for (var n = 0; n < len; n++) {
-                var item = list.eq(indices[n]);
+                if (all) {
+                    item = list.eq(n);
+                }
+                else {
+                    item = list.eq(indices[n]);
+                }
                 for (var prop in cssObj) {
                     if (item.css(prop) !== cssObj[prop]) {
-                        return false
+                        return false;
                     }
                 }
             }
@@ -35,4 +48,24 @@ beforeEach(function() {
         }
     });
     loadFixtures('fixture.html');
+    jasmine.Clock.useMock();
+    $.fx.off = true;
 });
+
+function expectListToBeSorted() {
+    expect($('#existing')).toHaveListItems([3,8,11,16,23,33,44,51,62,70,85,99]);
+}
+
+function expectListToNotBeSorted() {
+    expect($('#existing')).toHaveListItems([23,51,11,44,8,99,3,62,33,16,70,85]);
+}
+
+function expectListToBeSortedWith(algorithm) {
+    describe(algorithm + " sort", function() {
+        it("correctly sorts list", function() {
+            $('#existing').animatedSort({sortAlgorithm: algorithm, stepTime: 1});
+            jasmine.Clock.tick(10000);
+            expectListToBeSorted();
+        });
+    });
+};
