@@ -76,7 +76,7 @@ if ( typeof Object.create !== 'function') {
 
         highlight: function(array, color){
             var self = this;
-            if (color !== "none"){
+            if (color !== null){
                 var $liSel = self.numbers.eq(array[0]);
                 for (var n = 1; n < array.length; n++) {
                     $liSel = $liSel.add(self.numbers.eq(array[n]));
@@ -302,35 +302,32 @@ if ( typeof Object.create !== 'function') {
                 var self = this;
                 sort.animSteps.push(function(){sort.callback.call(self)});
             }
-            if (sort.animationTrigger === "none"){
-                sort.animation();
-            }
-            else if (typeof(sort.animationTrigger) === "object"){
+            if (sort.animationTrigger !== null){
                 $(document).on(sort.animationTrigger.event, sort.animationTrigger.selector, function() {
                     sort.animation();
                 });
             }
-            if (typeof(sort.resetTrigger) === "object"){
+            else {
+                sort.animation();
+            }
+            if (sort.resetTrigger !== null){
                 $(document).on(sort.resetTrigger.event, sort.resetTrigger.selector, function() {
-                    sort.$elem.find("ul").eq(0).remove();
-                    if (sort.listType === "existing") {
-                        sort.options.listType = sort.list;
-                    }
+                    sort.$elem.find("ul").eq(0).remove();                    //if (sort.listType === "existing") {
+                    sort.options.listType = sort.list;
                     sort.$elem.animatedSort(sort.options);
                 });
             }
-
         });
     };
 
     $.fn.animatedSort.options = {
         sortAlgorithm: "bubble",    // string for type of sort
-        highlightColor: "red",      // highlight color (none sets no color)
-        sortedColor: "blue",        // sorted color (none sets to no color)
+        highlightColor: "red",      // highlight color (null sets no color)
+        sortedColor: "blue",        // sorted color (null sets to no color)
         stepTime: 1000,             // ms between animation steps
         listType: "existing",       // "existing", object for random , array
-        animationTrigger: "none",   // animation trigger "none" loads on document, object for event and selector
-        resetTrigger: "none",       // trigger to reset and reinitialize
+        animationTrigger: null,     // animation trigger "none" loads on document, object for event and selector
+        resetTrigger: null,         // trigger to reset and reinitialize
         callback: null              // callback after animation completes
     };
 
