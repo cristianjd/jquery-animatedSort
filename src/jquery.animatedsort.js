@@ -248,15 +248,27 @@ if ( typeof Object.create !== 'function') {
             var len = list.length;
             function partition(array, begin, end, pivot) {
                 var piv = array[pivot];
-                self.swap(array, pivot, end-1);
+                if (pivot !== end-1) {
+                    self.slideOut([pivot, end-1]);
+                    self.swap(array, pivot, end-1);
+                    self.slideIn([pivot, end-1]);
+                }
                 var store = begin;
                 for (var n = begin; n < end-1; n++) {
                     if (array[n] <= piv) {
-                        self.swap(array, store, n);
+                        if (store !== n) {
+                            self.slideOut([store, n]);
+                            self.swap(array, store, n);
+                            self.slideIn([store, n]);
+                        }
                         store++;
                     }
                 }
-                self.swap(array, end-1, store);
+                if (end-1 !== store) {
+                    self.slideOut([end-1, store]);
+                    self.swap(array, end-1, store);
+                    self.slideIn([end-1, store]);
+                }
                 return store;
             }
 
@@ -313,8 +325,8 @@ if ( typeof Object.create !== 'function') {
 
     $.fn.animatedSort.options = {
         sortAlgorithm: "bubble",    // string for type of sort
-        highlightColor: "red",      // highlight color (none sets no highlight)
-        sortedColor: "blue",        // sorted color (none sets to no highlight)
+        highlightColor: "red",      // highlight color (none sets no color)
+        sortedColor: "blue",        // sorted color (none sets to no color)
         stepTime: 1000,             // ms between animation steps
         listType: "existing",       // "existing", object for random , array
         animationTrigger: "none",   // animation trigger "none" loads on document, object for event and selector
