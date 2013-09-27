@@ -1,0 +1,26 @@
+{
+    "name": "animatedSort",
+    "title": "jQuery Animated Sort Plugin",
+    "description": "jQuery plugin that animates the sorting of an html list using various options including the algorithm to be used.",
+    "keywords": [
+        "jquery",
+        "animation",
+        "sort"
+    ],
+    "version": "0.0.1",
+    "author": {
+        "name": "Cristian Derr",
+        "url": "www.github.com/cristianjd",
+        "email": "cristian.j.derr@gmail.com"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://github.com/cristianjd/jquery-animatedSort/MIT.LICENSE"
+        }
+    ],
+    "dependencies": {
+        "jquery": ">= 1.9.0",
+        "jquery-color": "2.x"
+    }
+}

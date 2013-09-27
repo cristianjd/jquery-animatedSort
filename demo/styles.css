@@ -15,21 +15,31 @@ h1 {
     margin-top: 24px;
 }
 
-h2 {
+h3 {
     text-align: center;
 }
 
 body {
-    background-color: #efefef;
+    background-color: #eaf4ff;
 }
 
-#bubble, #selection, #insertion, #quick{
-    border: 1px solid black;
+#bubble, #selection, #insertion, #quick {
+    height: 600px;
+    width: 900px;
+}
+
+#bubble-list, #selection-list, #insertion-list, #quick-list {
+    border: 1px solid rgba(0,0,0,0.15);
     width: 300px;
-    border-radius: 8px;
+    border-radius: 4px;
     margin-right: 10px;
     margin-left: 10px;
-    background-color: #c2c2c2;
+    background-color: rgb(245, 245, 245);
+}
+
+#bubble-code, #selection-code, #insertion-code, #quick-code {
+    margin-top: 0px;
+    position: absolute;
 }
 
 div {

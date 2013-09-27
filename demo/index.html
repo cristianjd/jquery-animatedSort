@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Animated Sort</title>
+        <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="styles.css">
+    </head>
+
+    <body>
+    <h1>Animated Sort jQuery Plugin</h1> <br/>
+        <div id="container">
+            <div id="bubble">
+                <div id="bubble-list">
+                    <h3>Bubble Sort</h3>
+                    <div class="buttons">
+                        <button type="button" class="btn btn-primary" id="bubble-sort">Sort</button>
+                        <button type="button" class="btn" id="bubble-reset">Reset</button>
+                    </div>
+                    <ul>
+                        <li>23</li>
+                        <li>51</li>
+                        <li>11</li>
+                        <li>44</li>
+                        <li>8</li>
+                        <li>99</li>
+                        <li>3</li>
+                        <li>62</li>
+                        <li>33</li>
+                        <li>16</li>
+                        <li>70</li>
+                        <li>85</li>
+                    </ul>
+                </div>
+                <div id="bubble-code">
+                    <h3>Example Code</h3>
+                    <pre>
+$("#bubble-list").animatedSort({
+    animationTrigger: {event: "click", selector: "#bubble-sort"},
+    resetTrigger: {event: "click", selector: "#bubble-reset"}
+});
+                    </pre>
+                </div>
+            </div>
+            <div id="selection">
+                <div id="selection-list">
+                    <h3>Selection Sort</h3>
+                    <div class="buttons">
+                        <button type="button" class="btn btn-primary"  id="selection-sort">Sort</button>
+                        <button type="button" class="btn" id="selection-reset">Reset</button>
+                   </div>
+                </div>
+                <div id="selection-code">
+                    <h3>Example Code</h3>
+                    <pre>
+$("#selection-list").animatedSort({
+    listType: [2, 19, 66, 5, 3, 79, 1, 8, 25, 64, 86, 34],
+    stepTime: 300,
+    highlightColor: "#05ef21",
+    sortedColor: "#aa0078",
+    sortAlgorithm: "selection",
+    animationTrigger: {event: "click", selector: "#selection-sort"},
+    resetTrigger: {event: "click", selector: "#selection-reset"},
+    callback: function() {$(this).css("background-color", "gray")}
+});
+                    </pre>
+                </div>
+            </div>
+            <div id="insertion">
+                <div id="insertion-list">
+                   <h3>Insertion Sort</h3>
+                    <div class="buttons">
+                        <button type="button" class="btn btn-primary" id="insertion-sort">Sort</button>
+                        <button type="button" class="btn" id="insertion-reset">Reset</button>
+                   </div>
+                </div>
+                <div id="insertion-code">
+                    <h3>Example Code</h3>
+                    <pre>
+$("#insertion-list").animatedSort({
+    stepTime: 600,
+    highlightColor: "teal",
+    listType: {bottom: 0, top: 100, length: 12},
+    sortedColor: "#e4701d",
+    sortAlgorithm: "insertion",
+    animationTrigger: {event: "click", selector: "#insertion-sort"},
+    resetTrigger: {event: "click", selector: "#insertion-reset"}
+});
+                    </pre>
+                </div>
+            </div>
+            <div id="quick">
+                <div id="quick-list">
+                    <h3>Quick Sort</h3>
+                    <div class="buttons">
+                        <button type="button" class="btn btn-primary" id="quick-sort">Sort</button>
+                        <button type="button" class="btn" id="quick-reset">Reset</button>
+                    </div>
+                </div>
+                <div id="quick-code">
+                    <h3>Example Code</h3>
+                    <pre>
+$("#quick-list").animatedSort({
+    stepTime: 800,
+    listType: {bottom: 0, top: 100, length: 12},
+    sortAlgorithm: "quick",
+    animationTrigger: {event: "click", selector: "#quick-sort"},
+    resetTrigger: {event: "click", selector: "#quick-reset"}
+});
+                    </pre>
+                </div>
+            </div>
+        </div>
+
+        <script src="http://codeorigin.jquery.com/jquery-1.10.2.min.js" ></script>
+        <script src="http://codeorigin.jquery.com/color/jquery.color.plus-names-2.1.2.min.js" ></script>
+        <script src="../src/jquery.animatedSort.js"></script>
+
+        <script>
+
+            $("#bubble-list").animatedSort({
+                animationTrigger: {event: "click", selector: "#bubble-sort"},
+                resetTrigger: {event: "click", selector: "#bubble-reset"}
+            });
+
+            $("#selection-list").animatedSort({
+                listType: [2, 19, 66, 5, 3, 79, 1, 8, 25, 64, 86, 34],
+                stepTime: 300,
+                highlightColor: "#05ef21",
+                sortedColor: "#aa0078",
+                sortAlgorithm: "selection",
+                animationTrigger: {event: "click", selector: "#selection-sort"},
+                resetTrigger: {event: "click", selector: "#selection-reset"},
+                callback: function() {$(this).css("background-color", "gray")}
+            });
+
+            $("#insertion-list").animatedSort({
+                stepTime: 600,
+                highlightColor: "teal",
+                listType: {bottom: 0, top: 100, length: 12},
+                sortedColor: "#e4701d",
+                sortAlgorithm: "insertion",
+                animationTrigger: {event: "click", selector: "#insertion-sort"},
+                resetTrigger: {event: "click", selector: "#insertion-reset"}
+            });
+
+            $("#quick-list").animatedSort({
+                stepTime: 800,
+                listType: {bottom: 0, top: 100, length: 12},
+                sortAlgorithm: "quick",
+                animationTrigger: {event: "click", selector: "#quick-sort"},
+                resetTrigger: {event: "click", selector: "#quick-reset"}
+            });
+
+        </script>
+
+    </body>
+</html>
