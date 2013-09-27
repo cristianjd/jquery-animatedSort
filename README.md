@@ -1,6 +1,6 @@
 # Description
 
-jQuery plugin that animates the sorting of an html list using various options including the algorithm to be used.
+jQuery plugin that animates the sorting of an HTML list using various options including the algorithm to be used.
 
 # Installation
 
