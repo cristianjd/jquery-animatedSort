@@ -1,5 +1,5 @@
 {
-    "name": "animatedSort",
+    "name": "animatedsort",
     "title": "jQuery Animated Sort Plugin",
     "description": "jQuery plugin that animates the sorting of an html list using various options including the algorithm to be used.",
     "keywords": [
