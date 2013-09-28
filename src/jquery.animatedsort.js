@@ -165,6 +165,13 @@ if ( typeof Object.create !== 'function') {
             });
         },
 
+        slideSwap: function(list, i1, i2) {
+            var self = this;
+            self.slideOut([i1, i2]);
+            self.swap(list, i1, i2);
+            self.slideIn([i1,i2]);
+        },
+
         // Execute Animation
 
         animation: function() {
@@ -185,9 +192,7 @@ if ( typeof Object.create !== 'function') {
                 for (var i = 0; i < n-1; ++i) {
                     self.addHighlightColor([i, i+1]);
                     if (list[i] > list[i+1]) {
-                        self.slideOut([i, i+1]);
-                        self.swap(list, i, i+1);
-                        self.slideIn([i, i+1]);
+                        self.slideSwap(list, i, i+1);
                     }
                     self.removeColor([i, i+1]);
                 }
@@ -211,9 +216,7 @@ if ( typeof Object.create !== 'function') {
                 }
                 if (min !== n){
                     self.addHighlightColor([min]);
-                    self.slideOut([n, min]);
-                    self.swap(list, n, min);
-                    self.slideIn([n, min]);
+                    self.slideSwap(list, n, min);
                 }
                 self.removeColor([min, n]);
                 self.addSortedColor([n]);
@@ -231,7 +234,6 @@ if ( typeof Object.create !== 'function') {
                     self.slideOut([pos]);
                     for (var i = n-1; i >= 0; i--){
                         if (val < list[i]){
-
                             self.swap(list, i+1, i);
                             pos = i;
                         }
@@ -249,25 +251,19 @@ if ( typeof Object.create !== 'function') {
             function partition(array, begin, end, pivot) {
                 var piv = array[pivot];
                 if (pivot !== end-1) {
-                    self.slideOut([pivot, end-1]);
-                    self.swap(array, pivot, end-1);
-                    self.slideIn([pivot, end-1]);
+                    self.slideSwap(array, pivot, end-1);
                 }
                 var store = begin;
                 for (var n = begin; n < end-1; n++) {
                     if (array[n] <= piv) {
                         if (store !== n) {
-                            self.slideOut([store, n]);
-                            self.swap(array, store, n);
-                            self.slideIn([store, n]);
+                            self.slideSwap(array, store, n);
                         }
                         store++;
                     }
                 }
                 if (end-1 !== store) {
-                    self.slideOut([end-1, store]);
-                    self.swap(array, end-1, store);
-                    self.slideIn([end-1, store]);
+                    self.slideSwap(array, end-1, store);
                 }
                 return store;
             }
@@ -312,7 +308,7 @@ if ( typeof Object.create !== 'function') {
             }
             if (sort.resetTrigger !== null){
                 $(document).on(sort.resetTrigger.event, sort.resetTrigger.selector, function() {
-                    sort.$elem.find("ul").eq(0).remove();                    //if (sort.listType === "existing") {
+                    sort.$elem.find("ul").eq(0).remove();
                     sort.options.listType = sort.list;
                     sort.$elem.animatedSort(sort.options);
                 });
