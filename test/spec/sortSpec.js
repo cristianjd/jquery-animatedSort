@@ -8,9 +8,16 @@ describe("Animated Sort Plugin", function() {
     describe("list types", function() {
 
         describe("existing list", function() {
-            it("correctly initializes margins", function() {
+            beforeEach(function() {
                 $('#existing').animatedSort();
+            });
+
+            it("correctly initializes margins", function() {
                 expect($('#existing')).toHaveListCss("all", {position: "relative", top: "0px", left: "0px"});
+            });
+
+            it("sets sorted flag to false", function() {
+                expect($('#existing')).toHaveListAttr('sorted','false');
             });
         });
 

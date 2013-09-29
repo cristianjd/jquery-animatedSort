@@ -45,6 +45,16 @@ beforeEach(function() {
                 }
             }
             return true;
+        },
+        toHaveListAttr: function(attrName, attrValue) {
+            var list = this.actual.find('li');
+            var len = list.length;
+            for (var n = 0; n < len; n++) {
+                if (list.eq(n).attr(attrName) !== attrValue) {
+                    return false;
+                }
+            }
+            return true;
         }
     });
     loadFixtures('fixture.html');
@@ -62,10 +72,21 @@ function expectListToNotBeSorted() {
 
 function expectListToBeSortedWith(algorithm) {
     describe(algorithm + " sort", function() {
-        it("correctly sorts list", function() {
+        beforeEach(function() {
             $('#existing').animatedSort({sortAlgorithm: algorithm, stepTime: 1});
             jasmine.Clock.tick(10000);
+        });
+
+        it("correctly sorts list", function() {
             expectListToBeSorted();
         });
+
+        it("adds sorted color to all items in list", function() {
+            expect($('#existing')).toHaveListCss("all", {color: "rgb(0, 0, 255)"});
+        });
+
+        it("sets sorted flag to true", function() {
+            expect($('#existing')).toHaveListAttr('sorted', 'true');
+        });
     });
-};
+}
