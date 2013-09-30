@@ -46,6 +46,9 @@ if ( typeof Object.create !== 'function') {
             self.$elem.find("li").each(function() {
                 list.push(Number($(this).text()));
                 $(this).css({"position": "relative", "top": 0, "left": 0});
+                if (self.highlightColor !== null && self.sortedColor !== null){
+                    $(this).attr('sorted', 'false');
+                }
             });
             self.list = list.slice(0);
             return list;
@@ -74,23 +77,35 @@ if ( typeof Object.create !== 'function') {
 
         // Animation Function Definitions
 
+        setSorted: function(i) {
+            var self = this;
+            self.highlight([i], self.sortedColor);
+          },
+
         highlight: function(array, color){
             var self = this;
             if (color !== null){
-                var $liSel = self.numbers.eq(array[0]);
-                for (var n = 1; n < array.length; n++) {
-                    $liSel = $liSel.add(self.numbers.eq(array[n]));
-                }
+                // color if number not already in sorted position
                 self.animSteps.push(function() {
                     //animate colors if jquery color plugin is present
+                    var $liSel = self.numbers.eq(array[0]).add(self.numbers.eq(array[1]));
+                    if (self.numbers.eq(0).attr('sorted')) {
+                        $liSel = $liSel.filter("[sorted='false']");
+                    }
                     if (self.animateColor){
-                        $liSel.animate({color: color}, self.colorTime);
+                        $liSel.animate({color: color}, self.colorTime, function() {
+                            if (color === self.sortedColor) {
+                                $liSel.attr('sorted', 'true');
+                            }
+                        });
                     } else {
                         $liSel.css("color", color);
+                        if (color === self.sortedColor) {
+                            $liSel.attr('sorted', 'true');
+                        }
                     }
                 });
             }
-
         },
 
         addHighlightColor: function(array) {
@@ -98,14 +113,9 @@ if ( typeof Object.create !== 'function') {
             self.highlight(array, self.highlightColor);
         },
 
-        addSortedColor: function(array) {
+        removeHighlightColor: function(array) {
             var self = this;
-            self.highlight(array, self.sortedColor);
-        },
-
-        removeColor: function(array) {
-        var self = this;
-        self.highlight(array, self.initialColor);
+            self.highlight(array, self.initialColor);
         },
 
         slide: function(array, distance){
@@ -152,15 +162,19 @@ if ( typeof Object.create !== 'function') {
                 var li2_left = $li2.css("left");
                 var li1_color = $li1.css("color");
                 var li2_color = $li2.css("color");
+                var li1_sorted = $li1.attr("sorted");
+                var li2_sorted = $li2.attr("sorted");
 
                 // animate swap
                 $li1.animate({top: li2_pos-li1_pos}, self.swapTime, function() {
                     $li1.css({top: 0, left: li2_left, color: li2_color});
                     $li1.text(li2_val);
+                    $li1.attr("sorted", li2_sorted);
                 });
                 $li2.animate({top: li1_pos-li2_pos}, self.swapTime, function() {
                     $li2.css({top: 0, left: li1_left, color: li1_color});
                     $li2.text(li1_val);
+                    $li2.attr("sorted", li1_sorted);
                 });
             });
         },
@@ -194,11 +208,11 @@ if ( typeof Object.create !== 'function') {
                     if (list[i] > list[i+1]) {
                         self.slideSwap(list, i, i+1);
                     }
-                    self.removeColor([i, i+1]);
+                    self.removeHighlightColor([i, i+1]);
                 }
-                self.addSortedColor([i, i+1]);
+                self.setSorted(n-1);
             }
-            self.addSortedColor([0]);
+            self.setSorted(0);
         },
 
         selection: function(list) {
@@ -212,14 +226,14 @@ if ( typeof Object.create !== 'function') {
                     if (list[i] < list[min]){
                         min = i;
                     }
-                    self.removeColor([i]);
+                    self.removeHighlightColor([i]);
                 }
                 if (min !== n){
                     self.addHighlightColor([min]);
                     self.slideSwap(list, n, min);
                 }
-                self.removeColor([min, n]);
-                self.addSortedColor([n]);
+                self.removeHighlightColor([min, n]);
+                self.setSorted(n);
             }
         },
 
@@ -240,45 +254,60 @@ if ( typeof Object.create !== 'function') {
                     }
                     self.slideIn([pos]);
                 }
-                self.removeColor([pos]);
-                self.addSortedColor([pos]);
+                self.removeHighlightColor([pos]);
+                self.setSorted(pos);
             }
         },
 
         quick: function(list) {
             var self = this;
             var len = list.length;
+
             function partition(array, begin, end, pivot) {
-                var piv = array[pivot];
-                if (pivot !== end-1) {
-                    self.slideSwap(array, pivot, end-1);
+                var pivotValue = array[pivot];
+                self.addHighlightColor([pivot]);
+                if (pivot !== end) {
+                    self.slideSwap(array, pivot, end);
                 }
                 var store = begin;
-                for (var n = begin; n < end-1; n++) {
-                    if (array[n] <= piv) {
+                for (var n = begin; n < end; n++) {
+                    self.addHighlightColor([n]);
+                    if (array[n] < pivotValue) {
                         if (store !== n) {
                             self.slideSwap(array, store, n);
+                            self.removeHighlightColor([store]);
+                        }
+                        else {
+                            self.removeHighlightColor([n]);
                         }
                         store++;
                     }
+                    else {
+                        self.removeHighlightColor([n]);
+                    }
                 }
-                if (end-1 !== store) {
-                    self.slideSwap(array, end-1, store);
+                if (end !== store) {
+                    self.slideSwap(array, end, store);
                 }
+                self.removeHighlightColor([store]);
+                self.setSorted(store);
                 return store;
             }
 
-            function qsort(array, begin, end) {
-                if (end-1 > begin) {
+            function quickSort(array, begin, end) {
+                if (end > begin) {
                     var pivot = begin+Math.floor(Math.random()*(end-begin));
                     pivot = partition(array, begin, end, pivot);
 
-                    qsort(array, begin, pivot);
-                    qsort(array, pivot+1, end);
+                    quickSort(array, begin, pivot);
+                    quickSort(array, pivot+1, end);
+                }
+                else {
+                    self.setSorted(begin);
                 }
             }
 
-            qsort(list, 0, len);
+            quickSort(list, 0, len-1);
         }
     };
 
@@ -293,7 +322,7 @@ if ( typeof Object.create !== 'function') {
             else if (typeof(sort.listType) === "object" ){
                 sort.genList(sort.randList(sort.listType.bottom, sort.listType.top, sort.listType.length));
             }
-            sort[sort.sortAlgorithm](sort.initList()); // prepares animation to be executed (will need switch for diff algs.)
+            sort[sort.sortAlgorithm](sort.initList());
             if (typeof(sort.callback) === "function"){
                 var self = this;
                 sort.animSteps.push(function(){sort.callback.call(self)});

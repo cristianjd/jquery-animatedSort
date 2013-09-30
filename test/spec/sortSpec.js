@@ -52,6 +52,16 @@ describe("Animated Sort Plugin", function() {
                 jasmine.Clock.tick(10000);
                 expect($('#existing')).toHaveListCss("all", {color: "rgb(0, 0, 255)"});
             });
+
+            describe("when set to null", function() {
+                beforeEach(function() {
+                    $('#existing').animatedSort({stepTime: 1, sortedColor: null});
+                });
+
+                it("is not applied to list", function() {
+                    expect($('#existing')).toHaveListCss("all", {color: "rgb(0, 0, 0)"});
+                });
+            });
         });
 
         describe("highlight color", function() {

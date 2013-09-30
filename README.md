@@ -51,7 +51,7 @@ Specify which sort algorithm to use in animation.
 - `sortAlgorithm: 'bubble'`     Use bubble sort. *Default.*
 - `sortAlgorithm: 'selection'`  Use selection sort.
 - `sortAlgorithm: 'insertion'`  Use insertion sort.
-- `sortAlgorithm: 'quick'`      Use quick sort. (Highlight and Sorted Colors are not currently available on quick sort).
+- `sortAlgorithm: 'quick'`      Use quick sort.
 
 ### Step Time
 Specify the time in millisecond between each step (color, slide, swap) in the animation
